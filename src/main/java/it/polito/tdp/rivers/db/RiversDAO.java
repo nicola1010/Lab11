@@ -36,4 +36,38 @@ public class RiversDAO {
 
 		return rivers;
 	}
+
+	public String numMis(River value) {
+		
+		int misurazioni=-1;
+		
+		final String sql = "SELECT COUNT(*) as numero_misurazioni FROM flow WHERE river= ? ";
+
+	//<River> rivers = new LinkedList<River>();
+
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, value.getId());
+
+			ResultSet res = st.executeQuery();
+			
+			while (res.next()) {
+				misurazioni= res.getInt("numero_misurazioni");
+				
+			}
+			
+			conn.close();
+			
+
+			
+			
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		
+		return Integer.toString(misurazioni);
+
+	}
 }
