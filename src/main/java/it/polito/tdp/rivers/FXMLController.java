@@ -56,7 +56,7 @@ public class FXMLController {
     void scegliFiume(ActionEvent event) {
     	
     	this.txtNumMeasurements.appendText(this.model.numMis(boxRiver.getValue()));
-    	 	
+    	 	this.txtFMed.appendText("dddd");
 
 
     
