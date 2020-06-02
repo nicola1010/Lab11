@@ -5,11 +5,12 @@
 package it.polito.tdp.rivers;
 
 import java.net.URL;
-import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.rivers.model.Model;
 import it.polito.tdp.rivers.model.River;
+import it.polito.tdp.rivers.model.Simulator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,50 +21,79 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 	
 	private Model model;
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
+	Simulator sim= new Simulator();
+	
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="boxRiver"
+    @FXML
     private ComboBox<River> boxRiver;
-    // Value injected by FXMLLoader
 
-    @FXML // fx:id="txtStartDate"
-    private TextField txtStartDate; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtStartDate;
 
-    @FXML // fx:id="txtEndDate"
-    private TextField txtEndDate; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtEndDate;
 
-    @FXML // fx:id="txtNumMeasurements"
-    private TextField txtNumMeasurements; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtNumMeasurements;
 
-    @FXML // fx:id="txtFMed"
-    private TextField txtFMed; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtFMed;
 
-    @FXML // fx:id="txtK"
-    private TextField txtK; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtK;
 
-    @FXML // fx:id="btnSimula"
-    private Button btnSimula; // Value injected by FXMLLoader
+    @FXML
+    private Button btnSimula;
 
-    @FXML // fx:id="txtResult"
-    private TextArea txtResult; // Value injected by FXMLLoader
-    
+    @FXML
+    private TextArea txtResult;
+
+   
+
+    @FXML
+    void handleSimula(ActionEvent event) {
+
+    	this.txtResult.clear();
+        
+        	sim.run(Integer.parseInt(this.txtK.getText()), Float.parseFloat(this.model.fmed(boxRiver.getValue())),
+        			this.boxRiver.getValue());
+        	
+        	int giono= sim.getGiorniNO();
+        	LinkedList<Float> ccc= new LinkedList <>(sim.getCcc());
+        	float cmed=0;
+        	
+        	for(float cc: ccc) {
+        		cmed=cmed+cc;
+        	}
+        	
+        	cmed=cmed/ccc.size();
+        	
+        	this.txtResult.appendText("GIORNI NO: " +giono+ "\n Capacità media= "+cmed);
+        
+    	
+    }
+
     @FXML
     void scegliFiume(ActionEvent event) {
+
+    	this.txtNumMeasurements.clear();
+    	this.txtStartDate.clear();
+    	this.txtEndDate.clear();
+    	this.txtFMed.clear();
     	
     	this.txtNumMeasurements.appendText(this.model.numMis(boxRiver.getValue()));
-    	 	this.txtFMed.appendText("dddd");
-
-
-    
+    	this.txtStartDate.appendText(this.model.primaMis(boxRiver.getValue()));
+    	this.txtEndDate.appendText(this.model.ultimaMis(boxRiver.getValue()));
+    	this.txtFMed.appendText(this.model.fmed(boxRiver.getValue()));
+    	
     }
-    
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
         assert boxRiver != null : "fx:id=\"boxRiver\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtStartDate != null : "fx:id=\"txtStartDate\" was not injected: check your FXML file 'Scene.fxml'.";
@@ -73,14 +103,14 @@ public class FXMLController {
         assert txtK != null : "fx:id=\"txtK\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnSimula != null : "fx:id=\"btnSimula\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
-        
-      
+
     }
     
     public void setModel(Model model) {
     	this.model = model;
-        this.boxRiver.getItems().addAll(this.model.getAllRivers());
-       
-   	
+    	
+        this.boxRiver.getItems().addAll(this.model.getAllRivers());   	
         }
+    
+    
 }

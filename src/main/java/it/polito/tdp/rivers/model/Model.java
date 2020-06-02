@@ -16,6 +16,21 @@ public class Model {
 		
 		return dao.numMis(value);
 	}
+
+	public String primaMis(River value) {
+		
+		return dao.primaMis(value);
+	}
+
+	public String ultimaMis(River value) {
+		
+		return dao.ultimaMis(value);
+	}
+
+	public String fmed(River value) {
+		// TODO Auto-generated method stub
+		return dao.fmed(value);
+	}
 	
 	
 }
